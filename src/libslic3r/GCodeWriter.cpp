@@ -278,10 +278,6 @@ std::string GCodeWriter::toolchange(unsigned int extruder_id)
             gcode << " ; change extruder";
         gcode << "\n";
         gcode << this->reset_e(true);
-        // See https://github.com/prusa3d/PrusaSlicer/issues/3848:
-        if (this->get_position().z() != 0.)
-            gcode << this->travel_to_z(this->get_position().z(),
-                                       "Ensure the tool is at correct z");
     }
     return gcode.str();
 }
