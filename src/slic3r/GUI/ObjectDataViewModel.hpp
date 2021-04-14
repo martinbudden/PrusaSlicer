@@ -27,6 +27,7 @@ enum ItemType {
     itSettings      = 16,
     itLayerRoot     = 32,
     itLayer         = 64,
+    itCustomSupports = 128
 };
 
 enum ColumnNumber
@@ -244,6 +245,7 @@ class ObjectDataViewModel :public wxDataViewModel
     std::vector<ObjectDataViewModelNode*>       m_objects;
     std::vector<wxBitmap>                       m_volume_bmps;
     wxBitmap                                    m_warning_bmp;
+    wxBitmap                                    m_info_bmp;
 
     wxDataViewCtrl*                             m_ctrl { nullptr };
 
@@ -261,6 +263,7 @@ public:
                                     const int extruder = 0,
                                     const bool create_frst_child = true);
     wxDataViewItem AddSettingsChild(const wxDataViewItem &parent_item);
+    wxDataViewItem AddCustomSupportsChild(const wxDataViewItem &parent_item);
     wxDataViewItem AddInstanceChild(const wxDataViewItem &parent_item, size_t num);
     wxDataViewItem AddInstanceChild(const wxDataViewItem &parent_item, const std::vector<bool>& print_indicator);
     wxDataViewItem AddLayersRoot(const wxDataViewItem &parent_item);

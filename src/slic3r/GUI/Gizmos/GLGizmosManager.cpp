@@ -283,6 +283,9 @@ bool GLGizmosManager::handle_shortcut(int key)
         }
     }
 
+    if (handled)
+        update_data();
+
     return handled;
 }
 
@@ -814,10 +817,7 @@ bool GLGizmosManager::on_char(wxKeyEvent& evt)
     if (!processed && !evt.HasModifiers())
     {
         if (handle_shortcut(keyCode))
-        {
-            update_data();
             processed = true;
-        }
     }
 
     if (processed)

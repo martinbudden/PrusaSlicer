@@ -47,6 +47,7 @@ void ObjectDataViewModelNode::init_container()
 static constexpr char LayerRootIcon[]   = "edit_layers_all";
 static constexpr char LayerIcon[]       = "edit_layers_some";
 static constexpr char WarningIcon[]     = "exclamation";
+static constexpr char InfoIcon[]        = "info";
 
 ObjectDataViewModelNode::ObjectDataViewModelNode(ObjectDataViewModelNode* parent, const ItemType type) :
     m_parent(parent),
@@ -69,6 +70,8 @@ ObjectDataViewModelNode::ObjectDataViewModelNode(ObjectDataViewModelNode* parent
         m_bmp = create_scaled_bitmap(LayerRootIcon);    // FIXME: pass window ptr
         m_name = _(L("Layers"));
     }
+    else if (type == itCustomSupports)
+        m_name = _L("Paint-on supports");
 
     if (type & (itInstanceRoot | itLayerRoot))
         init_container();
@@ -250,6 +253,7 @@ ObjectDataViewModel::ObjectDataViewModel()
 
     m_volume_bmps = MenuFactory::get_volume_bitmaps();
     m_warning_bmp = create_scaled_bitmap(WarningIcon);
+    m_info_bmp    = create_scaled_bitmap(InfoIcon);
 }
 
 ObjectDataViewModel::~ObjectDataViewModel()
@@ -328,6 +332,20 @@ wxDataViewItem ObjectDataViewModel::AddVolumeChild( const wxDataViewItem &parent
     node->m_volume_type = volume_type;
 
 	return child;
+}
+
+wxDataViewItem ObjectDataViewModel::AddCustomSupportsChild(const wxDataViewItem &parent_item)
+{
+    ObjectDataViewModelNode *root = static_cast<ObjectDataViewModelNode*>(parent_item.GetID());
+    if (!root) return wxDataViewItem(0);
+
+    const auto node = new ObjectDataViewModelNode(root, itCustomSupports);
+    root->Insert(node, 0);
+    node->SetBitmap(m_info_bmp);
+    // notify control
+    const wxDataViewItem child((void*)node);
+    ItemAdded(parent_item, child);
+    return child;
 }
 
 wxDataViewItem ObjectDataViewModel::AddSettingsChild(const wxDataViewItem &parent_item)
